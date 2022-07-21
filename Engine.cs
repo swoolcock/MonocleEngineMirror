@@ -40,6 +40,8 @@ namespace Monocle
         // time
         public static float DeltaTime { get; private set; }
         public static float RawDeltaTime { get; private set; }
+        public static GameTime UpdateGameTime { get; private set; }
+        public static GameTime DrawGameTime { get; private set; }
         public static float TimeRate = 1f;
         public static float FreezeTimer;
         public static int FPS;
@@ -71,7 +73,7 @@ namespace Monocle
         // scene
         private Scene scene;
         private Scene nextScene;
-        
+
         public Engine(int width, int height, int windowWidth, int windowHeight, string windowTitle, bool fullscreen)
         {
             Instance = this;
@@ -189,7 +191,7 @@ namespace Monocle
         protected override void LoadContent()
         {
             base.LoadContent();
-            
+
             Monocle.Draw.Initialize(GraphicsDevice);
         }
 
@@ -197,6 +199,8 @@ namespace Monocle
         {
             RawDeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             DeltaTime = RawDeltaTime * TimeRate;
+
+            UpdateGameTime = gameTime;
 
             //Update input
             MInput.Update();
@@ -243,12 +247,14 @@ namespace Monocle
                 if (scene != null)
                     scene.Begin();
             }
-            
+
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
+            DrawGameTime = gameTime;
+
             RenderCore();
 
             base.Draw(gameTime);
@@ -359,13 +365,13 @@ namespace Monocle
             resizing = true;
             Graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
             Graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
-            Graphics.IsFullScreen = true;         
+            Graphics.IsFullScreen = true;
             Graphics.ApplyChanges();
             Console.WriteLine("FULLSCREEN");
             resizing = false;
 #endif
         }
-        
+
         private void UpdateView()
         {
             float screenWidth = GraphicsDevice.PresentationParameters.BackBufferWidth;
