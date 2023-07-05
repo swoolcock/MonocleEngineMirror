@@ -19,6 +19,7 @@ namespace Monocle
         /// <summary>
         /// Save an object to a file so you can load it later
         /// </summary>
+        [Obsolete("Obsolete")]
         public static void SerializeToFile<T>(T obj, string filepath, SerializeModes mode)
         {
             using (var fileStream = new FileStream(filepath, FileMode.Create))
@@ -62,6 +63,7 @@ namespace Monocle
         /// <summary>
         /// Load an object that was previously serialized to a file
         /// </summary>
+        [Obsolete("Obsolete")]
         public static T DeserializeFromFile<T>(string filepath, SerializeModes mode)
         {
             T data;
